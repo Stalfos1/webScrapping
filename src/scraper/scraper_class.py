@@ -100,6 +100,33 @@ class Scraper:
         match = re.search(r'\d+', comments_text)
         return int(match.group()) if match else 0
     
+###########################
+##Filter all previous entries with less than or equal to five words in the title, ordered by points.
+###########################
+
+   
+    def filter_entries_with_short_titles_by_score(self, filename='hacker_news.json'):
+        data = self._load_json_file(filename)
+        if not data:
+            return []
+
+        filtered = [
+            entry for entry in data
+            if self._title_has_five_or_fewer_words(entry['title'])
+        ]
+
+        filtered.sort(key=lambda x: self._extract_score(x['score']), reverse=True)
+        return filtered
+
+    def _title_has_five_or_fewer_words(self, title):
+        words = re.findall(r'\b\w+\b', title)
+        return len(words) <= 5
+
+    def _extract_score(self, score_text):
+        match = re.search(r'\d+', score_text)
+        return int(match.group()) if match else 0
+
+    
  #############################################
  #Saving the scraping in a Json object
  #############################################
