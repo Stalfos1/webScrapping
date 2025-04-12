@@ -13,7 +13,7 @@
 
     <div class="filters">
         <form action="{{ url_for('index') }}" method="get">
-            <button type="submit">Show All</button>
+            <button type="submit">No filters</button>
         </form>
         <form action="{{ url_for('index') }}" method="get">
             <input type="hidden" name="filter" value="long">
@@ -26,8 +26,14 @@
         
     </div>
 
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search titles..." onkeyup="filterTable()">
+    </div>
+
+
+
     {% if entries %}
-        <table>
+        <table class="styled-table">
             <thead>
                 <tr>
                     <th>Rank</th>
@@ -47,8 +53,23 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if not show_all and entries|length < total_entries %}
+        <div class="show-all">
+                <form action="{{ url_for('index') }}" method="get">
+                    {% if request.args.get('filter') %}
+                        <input type="hidden" name="filter" value="{{ request.args.get('filter') }}">
+                    {% endif %}
+                    <input type="hidden" name="show_all" value="true">
+                    <button type="submit">Show All Entries ({{ total_entries }})</button>
+                </form>
+            </div>
+        {% endif %}
+
+
     {% else %}
         <p>No entries found.</p>
     {% endif %}
+    <script src="{{ url_for('static', filename='filter.js') }}"></script>
+
 </body>
 </html>

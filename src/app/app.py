@@ -1,4 +1,5 @@
 from flask import Flask, render_template,request, jsonify,redirect,url_for
+
 import json
 import os
 from scraper.scraper_class import Scraper
@@ -8,6 +9,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     filter_type = request.args.get('filter', 'all')
+    show_all = request.args.get('show_all', 'false') == 'true'
     scraper = Scraper()
     scraper.fetch()
     json_file = 'app\hacker_news.json'
@@ -29,7 +31,11 @@ def index():
             entries = json.load(f)
         message = None
 
-    return render_template('index.html', entries=entries, message=message)
+    total_entries = len(entries)
+    if not show_all:
+        entries = entries[:12]
+            
+    return render_template('index.html', entries=entries, message=message, total_entries=total_entries, show_all=show_all)
 
 if __name__ == '__main__':
     app.run(debug=True)
