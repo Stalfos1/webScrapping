@@ -20,10 +20,10 @@ def index():
 
     if filter_type == 'long':
         entries = scraper.filter_entries_by_title_words_from_file(json_path)
-        message = "Filtered: Titles with more than 5 words"
+        message = "Filtered: Titles with more than 5 words, ordered by the number of comments first"
     elif filter_type == 'short':
         entries = scraper.filter_entries_with_short_titles_by_score(json_path)
-        message = "Filtered: Titles with 5 or fewer words"
+        message = "Filtered: Titles with 5 or fewer words, ordered by points"
     else:
         with open(json_path, 'r', encoding='utf-8') as f:
             entries = json.load(f)

@@ -7,6 +7,9 @@
 </head>
 <body>
     <h1>Scraped Data from Hacker News</h1>
+        {% if message %}
+        <h2>{{ message }}</h2>
+        {% endif %}
 
     <div class="filters">
         <form action="{{ url_for('index') }}" method="get">
@@ -14,11 +17,11 @@
         </form>
         <form action="{{ url_for('index') }}" method="get">
             <input type="hidden" name="filter" value="long">
-            <button type="submit">Titles > 5 Words</button>
+            <button type="submit">Titles with more than 5 Words</button>
         </form>
         <form action="{{ url_for('index') }}" method="get">
             <input type="hidden" name="filter" value="short">
-            <button type="submit">Titles ≤ 5 Words</button>
+            <button type="submit">Titles less than or equal to 5 words</button>
         </form>
         
     </div>
