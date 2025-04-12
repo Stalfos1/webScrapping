@@ -2,8 +2,12 @@ from scraper.scraper_class import Scraper
 
 def main():
     scraper = Scraper()
-    scraper.fetch(limit=30)
+    scraper.fetch()
     json_file='src\hacker_news.json'
+    
+    scraper.save_to_file(json_file)
+
+
     print(scraper.to_json())
     
     print("\n")

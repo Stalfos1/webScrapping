@@ -36,48 +36,64 @@ class Scraper:
     def _extract_title_elements(self, soup):
         return soup.find_all('tr', class_='athing')
 
-    def _process_entry(self, element, index):
+    def _process_entry(self, element, rank):
         title = self._get_title(element)
         score = self._get_score(element)
         comments = self._get_comments(element)
 
         return {
-            'number': index,
+            'rank': rank,
             'title': title,
             'score': score,
             'comments': comments
         }
 
+    def _get_rank(self, element):
+        rank_tag = element.find('span', class_='rank')
+        if rank_tag:
+            match = re.search(r'\d+', rank_tag.get_text(strip=True))
+            return int(match.group()) if match else None
+        return None
+
     def _get_title(self, element):
-        title_tag = element.find('span', class_='titleline')
-        return title_tag.get_text(strip=True) if title_tag else 'Titleless'
+        titleline = element.find('span', class_='titleline')
+        if titleline:
+            link = titleline.find('a')
+            return link.get_text(strip=True) if link else 'Titleless'
+        return 'Titleless'
 
     def _get_score(self, element):
         next_row = element.find_next_sibling('tr')
         subtext = next_row.find('td', class_='subtext') if next_row else None
         score_tag = subtext.find('span', class_='score') if subtext else None
-        return score_tag.get_text(strip=True) if score_tag else 'Scoreless'
+        return score_tag.get_text(strip=True) if score_tag else '0 points'
 
     def _get_comments(self, element):
         next_row = element.find_next_sibling('tr')
         subtext = next_row.find('td', class_='subtext') if next_row else None
         comment_links = subtext.find_all('a') if subtext else []
         comments_text = comment_links[-1].get_text(strip=True) if comment_links else 'No comments'
+        comments_text = comments_text.replace('\xa0', ' ').strip() #Cleaning of \xa0 characters
         return comments_text if 'comment' in comments_text else '0 comments'
     
 ###########################
 ##Filter all previous entries with more than five words in the title, ordered by the number of comments first.
 ###########################
 
+    def _clean_title(self, title):
+        return re.sub(r'\s*\([^)]*\)$', '', title).strip()
+    
     def filter_entries_by_title_words_from_file(self, filename='hacker_news.json'):
         data = self._load_json_file(filename)
         if not data:
             return []
 
-        filtered = [
-            entry for entry in data
-            if self._title_has_more_than_five_words(entry['title'])
-        ]
+        filtered = []
+        for entry in data:
+            clean_title = self._clean_title(entry['title'])
+            if self._title_has_more_than_five_words(clean_title):
+                entry['title'] = clean_title
+                filtered.append(entry)
 
         filtered.sort(key=lambda x: self._extract_comment_count(x['comments']), reverse=True)
         return filtered
@@ -93,7 +109,7 @@ class Scraper:
         return []
 
     def _title_has_more_than_five_words(self, title):
-        words = re.findall(r'\b\w+\b', title)
+        words = title.strip().split()
         return len(words) > 5
 
     def _extract_comment_count(self, comments_text):
@@ -110,16 +126,18 @@ class Scraper:
         if not data:
             return []
 
-        filtered = [
-            entry for entry in data
-            if self._title_has_five_or_fewer_words(entry['title'])
-        ]
+        filtered = []
+        for entry in data:
+            clean_title = self._clean_title(entry['title'])
+            if self._title_has_five_or_fewer_words(clean_title):
+                entry['title'] = clean_title  # Guarda la versión limpia
+                filtered.append(entry)
 
         filtered.sort(key=lambda x: self._extract_score(x['score']), reverse=True)
         return filtered
 
     def _title_has_five_or_fewer_words(self, title):
-        words = re.findall(r'\b\w+\b', title)
+        words = title.strip().split()
         return len(words) <= 5
 
     def _extract_score(self, score_text):
