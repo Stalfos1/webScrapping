@@ -109,7 +109,8 @@ class Scraper:
         return []
 
     def _title_has_more_than_five_words(self, title):
-        words = title.strip().split()
+        clean_title = re.sub(r'[^\w\s]', ' ', title)
+        words = clean_title.strip().split()
         return len(words) > 5
 
     def _extract_comment_count(self, comments_text):
@@ -130,14 +131,15 @@ class Scraper:
         for entry in data:
             clean_title = self._clean_title(entry['title'])
             if self._title_has_five_or_fewer_words(clean_title):
-                entry['title'] = clean_title  # Guarda la versión limpia
+                entry['title'] = clean_title
                 filtered.append(entry)
 
         filtered.sort(key=lambda x: self._extract_score(x['score']), reverse=True)
         return filtered
 
     def _title_has_five_or_fewer_words(self, title):
-        words = title.strip().split()
+        clean_title = re.sub(r'[^\w\s]', ' ', title)
+        words = clean_title.strip().split()
         return len(words) <= 5
 
     def _extract_score(self, score_text):
