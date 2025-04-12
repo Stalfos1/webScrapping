@@ -81,7 +81,7 @@ class Scraper:
 ###########################
 
     def _clean_title(self, title):
-        return re.sub(r'\s*\([^)]*\)$', '', title).strip()
+        return re.sub(r'\s*\([^)]*\)\s*$', '', title).strip()
     
     def filter_entries_by_title_words_from_file(self, filename='hacker_news.json'):
         data = self._load_json_file(filename)
