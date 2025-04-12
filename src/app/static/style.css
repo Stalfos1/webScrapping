@@ -31,3 +31,27 @@ tr:nth-child(even) {
     color: red;
     font-weight: bold;
 }
+
+.filters {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.filters form {
+    display: inline;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    background-color: #ff6600;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #e65c00;
+}

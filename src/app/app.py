@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify,redirect,url_for
+from flask import Flask, render_template,request, jsonify,redirect,url_for
 import json
 import os
 from scraper.scraper_class import Scraper
@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    filter_type = request.args.get('filter', 'all')
     scraper = Scraper()
     scraper.fetch()
     json_file = 'app\hacker_news.json'
@@ -17,10 +18,18 @@ def index():
     if not os.path.exists(json_path):
         return render_template('index.html', entries=[], message="File not found, please run the scraper first.")
 
-    with open(json_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
+    if filter_type == 'long':
+        entries = scraper.filter_entries_by_title_words_from_file(json_path)
+        message = "Filtered: Titles with more than 5 words"
+    elif filter_type == 'short':
+        entries = scraper.filter_entries_with_short_titles_by_score(json_path)
+        message = "Filtered: Titles with 5 or fewer words"
+    else:
+        with open(json_path, 'r', encoding='utf-8') as f:
+            entries = json.load(f)
+        message = None
 
-    return render_template('index.html', entries=data, message=None)
+    return render_template('index.html', entries=entries, message=message)
 
 if __name__ == '__main__':
     app.run(debug=True)

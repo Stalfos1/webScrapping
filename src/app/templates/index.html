@@ -8,9 +8,22 @@
 <body>
     <h1>Scraped Data from Hacker News</h1>
 
-    {% if message %}
-        <p class="message">{{ message }}</p>
-    {% else %}
+    <div class="filters">
+        <form action="{{ url_for('index') }}" method="get">
+            <button type="submit">Show All</button>
+        </form>
+        <form action="{{ url_for('index') }}" method="get">
+            <input type="hidden" name="filter" value="long">
+            <button type="submit">Titles > 5 Words</button>
+        </form>
+        <form action="{{ url_for('index') }}" method="get">
+            <input type="hidden" name="filter" value="short">
+            <button type="submit">Titles ≤ 5 Words</button>
+        </form>
+        
+    </div>
+
+    {% if entries %}
         <table>
             <thead>
                 <tr>
@@ -31,6 +44,8 @@
                 {% endfor %}
             </tbody>
         </table>
+    {% else %}
+        <p>No entries found.</p>
     {% endif %}
 </body>
 </html>
