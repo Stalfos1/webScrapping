@@ -15,18 +15,18 @@ This project is a web application that scrapes the top 30 entries from Hacker Ne
 ## 📁 Project Structure
 The project's source (src) directory contains the following:
 
-├── app/
-│   ├── static/
-│   │   └── filter.js
-│   │   └── style.css
-│   ├── templates/
-│   │   └── index.html
-│   └── app.py
-├── scraper/
-│   └── scraper.py
-├── tests/
-│   └── test_scraper.py
-└── README.md
+* `app/`
+    * `static/`
+        * `filter.js`
+        * `style.css`
+    * `templates/`
+        * `index.html`
+    * `app.py`
+* `scraper/`
+    * `scraper.py`
+* `tests/`
+    * `test_scraper.py`
+* `README.md`
 
 ### `src/app/`
 Contains the core of the Flask web application:
