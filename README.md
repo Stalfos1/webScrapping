@@ -80,7 +80,7 @@ Contains the project's test suite:
     python -m app.app   
     ```
     Then, open your web browser and go to `http://127.0.0.1:5000/` (default), or the address provided in the terminal.
-    **Using the Web Application:**
+    ### Using the web Application:
 
     Once the web application is running, you will see a page displaying the scraped data from Hacker News in a table format, showing the Rank, Title, Score, and Comments for each entry.
 
@@ -94,14 +94,14 @@ Contains the project's test suite:
     * **Show All Entries Button:** Below the table (if not all entries are initially displayed), you will find a button that says "Show All Entries (XX)", where "XX" is the total number of scraped entries. Clicking this button will load and display all the scraped entries on the page, overriding the initial limit of 12. If a filter is active when you click "Show All Entries", the filter will still be applied to the complete list.
 
 
-2.  **For the scraper as a standalone module:** You can use the `Scraper` class and test it in the src/main.py file or you can import it as:
+3.  **For the scraper as a standalone module:** You can use the `Scraper` class and test it in the src/main.py file or you can import it as:
     ```python
     from scraper.scraper_class import Scraper
 
     scraper = Scraper()
     data = scraper.fetch()
     ```
-3. **Scraper Fetch Override:** The `fetch()` method in the `Scraper` class allows you to specify the number of entries to scrape. By default, calling `fetch()` without any arguments will retrieve the top 30 entries. To scrape a different number, simply pass the desired count as an argument:
+4. **Scraper Fetch Override:** The `fetch()` method in the `Scraper` class allows you to specify the number of entries to scrape. By default, calling `fetch()` without any arguments will retrieve the top 30 entries. To scrape a different number, simply pass the desired count as an argument:
       ```python
     from scraper.scraper_class import Scraper
 
@@ -110,7 +110,7 @@ Contains the project's test suite:
     data = scraper.fetch(10)
     data = scraper.fetch(40)
     ```
-4.  **Title Word Count Filtering (Internal Methods):**
+5.  **Title Word Count Filtering (Internal Methods):**
 
     The `Scraper` class includes internal helper methods to determine the number of words in a news title for filtering purposes:
 
