@@ -2,6 +2,11 @@
 ## Overview
 This project is a web application that scrapes the top 30 entries from Hacker News and presents them through an interface. Built with Python, Flask and BeautifulSoup.
 
+## 🔗 Deployment
+The application is deployed on **Render** and can be accessed at:
+
+👉 [Render](https://webscrapping-tjoi.onrender.com/)
+
 ## 🚀 Features
 
 * **Web Scraping:** Fetches the top 30 entries from Hacker News using BeautifulSoup.
